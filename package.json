@@ -1,0 +1,63 @@
+{
+	"name": "users-crud",
+	"version": "1.0.0",
+	"description": "Users CRUD admin panel (Express + EJS + TS)",
+	"private": true,
+	"engines": {
+		"node": ">=20",
+		"npm": ">=10"
+	},
+	"scripts": {
+		"watch": "nodemon --watch src --ext ts,ejs --exec ts-node src/server.ts",
+		"start": "node dist/server.js",
+		"clean": "rm -rf dist",
+		"build": "npm run clean && tsc",
+		"migrate": "sequelize-cli db:migrate",
+		"migrate:undo": "sequelize-cli db:migrate:undo:all",
+		"seed": "sequelize-cli db:seed:all",
+		"seed:undo": "sequelize-cli db:seed:undo:all",
+		"db:prepare": "npm run build && npm run migrate && npm run seed",
+		"db:reset": "npm run migrate:undo && npm run migrate && npm run seed",
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint --write .",
+		"format": "biome format --write .",
+		"check": "biome check .",
+		"fix": "biome check --write ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@faker-js/faker": "^10.0.0",
+		"bcrypt": "^6.0.0",
+		"csurf": "^1.11.0",
+		"dotenv": "^17.2.3",
+		"ejs": "^3.1.10",
+		"ejs-mate": "^4.0.0",
+		"express": "^5.1.0",
+		"express-rate-limit": "^7.4.0",
+		"express-session": "^1.18.2",
+		"express-validator": "^7.2.1",
+		"helmet": "^8.1.0",
+		"method-override": "^3.0.0",
+		"morgan": "^1.10.1",
+		"pg": "^8.13.1",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.37.7",
+		"sqlite3": "^5.1.7"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.5",
+		"@types/bcrypt": "^6.0.0",
+		"@types/csurf": "^1.11.5",
+		"@types/express": "^5.0.3",
+		"@types/express-session": "^1.18.2",
+		"@types/method-override": "^3.0.0",
+		"@types/morgan": "^1.9.10",
+		"@types/node": "^24.7.2",
+		"nodemon": "^3.1.10",
+		"sequelize-cli": "^6.6.3",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.3"
+	}
+}
