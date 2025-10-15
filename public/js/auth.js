@@ -162,7 +162,7 @@ window.Auth = {
 
 		// Validate username
 		if (!this.validateUsername(username.value.trim())) {
-			this.showFieldError(username, "Enter username");
+			this.showFieldError(username, "Username must be 3–100 characters");
 			isValid = false;
 		} else {
 			this.clearFieldError(username);
@@ -170,7 +170,7 @@ window.Auth = {
 
 		// Validate password
 		if (!this.validatePassword(password.value)) {
-			this.showFieldError(password, "Enter password");
+			this.showFieldError(password, "Password must be 6–100 characters");
 			isValid = false;
 		} else {
 			this.clearFieldError(password);
@@ -204,12 +204,16 @@ window.Auth = {
 
 	// Validate username
 	validateUsername: function (username) {
-		return username && username.length > 0;
+		return (
+			username && username.length >= 3 && username.length <= 100
+		);
 	},
 
 	// Validate password
 	validatePassword: function (password) {
-		return password && password.length > 0;
+		return (
+			password && password.length >= 6 && password.length <= 100
+		);
 	},
 
 	// Show field error

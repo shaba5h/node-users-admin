@@ -548,15 +548,6 @@ App.components = {
 				message = "This field is required";
 			}
 
-			// Email validation
-			if (field.type === "email" && value) {
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailRegex.test(value)) {
-					isValid = false;
-					message = "Enter a valid email address";
-				}
-			}
-
 			// Password validation
 			if (
 				field.type === "password" &&

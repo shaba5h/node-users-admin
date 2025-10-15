@@ -214,7 +214,6 @@ window.Users = {
 		const username = form.querySelector("#username");
 		const firstName = form.querySelector("#firstName");
 		const lastName = form.querySelector("#lastName");
-		const email = form.querySelector("#email");
 		const password = form.querySelector("#password");
 		const birthDate = form.querySelector("#birthDate");
 
@@ -222,7 +221,7 @@ window.Users = {
 		if (username && !this.validateUsername(username.value.trim())) {
 			this.showFieldError(
 				username,
-				"Username must be 3–50 characters and contain only letters, digits, and underscores",
+				"Username must be 3–100 characters",
 			);
 			isValid = false;
 		} else if (username) {
@@ -231,7 +230,7 @@ window.Users = {
 
 		// Validate first name
 		if (firstName && !this.validateName(firstName.value.trim())) {
-			this.showFieldError(firstName, "First name must be 2–50 characters");
+			this.showFieldError(firstName, "First name max length is 100 characters");
 			isValid = false;
 		} else if (firstName) {
 			this.clearFieldError(firstName);
@@ -239,26 +238,19 @@ window.Users = {
 
 		// Validate last name
 		if (lastName && !this.validateName(lastName.value.trim())) {
-			this.showFieldError(lastName, "Last name must be 2–50 characters");
+			this.showFieldError(lastName, "Last name max length is 100 characters");
 			isValid = false;
 		} else if (lastName) {
 			this.clearFieldError(lastName);
 		}
 
-		// Validate email
-		if (email && !this.validateEmail(email.value.trim())) {
-			this.showFieldError(email, "Enter a valid email address");
-			isValid = false;
-		} else if (email) {
-			this.clearFieldError(email);
-		}
 
 		// Validate password (only for new users or when changing password)
 		if (password && password.value) {
 			if (!this.validatePassword(password.value)) {
 				this.showFieldError(
 					password,
-					"Password must be at least 8 characters and include uppercase, lowercase, and digits",
+					"Password length must be 6–100 characters",
 				);
 				isValid = false;
 			} else {
@@ -283,40 +275,21 @@ window.Users = {
 
 	// Validate username
 	validateUsername: function (username) {
-		if (!username || username.length < 3 || username.length > 50) {
-			return false;
-		}
-
-		// Only letters, numbers, and underscores
-		const usernameRegex = /^[a-zA-Z0-9_]+$/;
-		return usernameRegex.test(username);
+		return (
+			username && username.length >= 3 && username.length <= 100
+		);
 	},
 
 	// Validate name fields
 	validateName: function (name) {
-		return name && name.length >= 2 && name.length <= 50;
-	},
-
-	// Validate email
-	validateEmail: function (email) {
-		if (!email) return false;
-
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
+		return name && name.length > 0 && name.length <= 100;
 	},
 
 	// Validate password
 	validatePassword: function (password) {
-		if (!password || password.length < 8) {
-			return false;
-		}
-
-		// Must contain at least one uppercase letter, one lowercase letter, and one number
-		const hasUppercase = /[A-Z]/.test(password);
-		const hasLowercase = /[a-z]/.test(password);
-		const hasNumber = /\d/.test(password);
-
-		return hasUppercase && hasLowercase && hasNumber;
+		return (
+			password && password.length >= 6 && password.length <= 100
+		);
 	},
 
 	// Validate birth date

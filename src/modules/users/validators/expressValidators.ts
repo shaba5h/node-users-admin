@@ -35,8 +35,8 @@ export const createUserValidators = [
 	body("password")
 		.notEmpty()
 		.withMessage("Password is required")
-		.isLength({ min: 6 })
-		.withMessage("Password must be at least 6 characters"),
+		.isLength({ min: 6, max: 100 })
+		.withMessage("Password length must be 6–100 characters"),
 	body("first_name")
 		.trim()
 		.notEmpty()
@@ -73,8 +73,8 @@ export const updateUserValidators = [
 	body("password")
 		.trim()
 		.optional({ checkFalsy: true })
-		.isLength({ min: 6 })
-		.withMessage("Password must be at least 6 characters"),
+		.isLength({ min: 6, max: 100 })
+		.withMessage("Password length must be 6–100 characters"),
 	body("first_name")
 		.optional()
 		.trim()
