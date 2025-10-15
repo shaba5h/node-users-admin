@@ -22,9 +22,9 @@ module.exports = {
 			const gender = faker.person.sex();
 			const firstName = faker.person.firstName(gender);
 			const lastName = faker.person.lastName(gender);
-			const birthdate = faker.date.past({
-				years: faker.number.int({ min: 18, max: 60 }),
-			});
+			const birthdate = faker.date.birthdate({ min: 18, max: 60 })
+				.toISOString()
+				.slice(0, 10);
 			const rnd = faker.number.int({ min: 1000, max: 999999 });
 			const username = `${faker.internet.username({ firstName, lastName })}_${rnd}`;
 			users.push({
