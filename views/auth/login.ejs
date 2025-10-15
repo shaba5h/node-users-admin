@@ -55,6 +55,8 @@
                             value="<%= typeof username !== 'undefined' ? username : '' %>"
                             placeholder="Enter username"
                             required
+                            minlength="3"
+                            maxlength="100"
                             autocomplete="username"
                             autofocus
                         >
@@ -75,6 +77,8 @@
                                 class="form-control"
                             placeholder="Enter password"
                                 required
+                                minlength="6"
+                                maxlength="100"
                                 autocomplete="current-password"
                             >
                             <button type="button" class="password-toggle" data-toggle="password">

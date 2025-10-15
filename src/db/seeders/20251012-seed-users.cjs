@@ -16,7 +16,7 @@ module.exports = {
 		const users = [];
 		const COUNT = Number(process.env.SEED_USERS_COUNT || "200");
 
-		const STATIC_PASSWORD_HASH = await bcrypt.hash("test", 12);
+		const STATIC_PASSWORD_HASH = await bcrypt.hash("secret1", 12);
 
 		for (let i = 0; i < COUNT; i++) {
 			const gender = faker.person.sex();

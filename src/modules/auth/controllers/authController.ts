@@ -35,6 +35,12 @@ export const postLogin: RequestHandler = async (req, res) => {
 			.status(401)
 			.render("auth/login", { error: "Invalid credentials" });
 	}
+	// Deny access for non-admin accounts with explicit message
+	if (!user.is_admin) {
+		return res
+			.status(403)
+			.render("auth/login", { error: "Insufficient permissions: administrator access required" });
+	}
 	(req.session as any).userId = user.id;
 	(req.session as any).isAdmin = user.is_admin;
 	return res.redirect("/");
