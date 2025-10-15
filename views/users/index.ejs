@@ -1,0 +1,360 @@
+<% layout('layouts/main') %>
+
+<!-- Users Management Content -->
+<div class="users-container">
+    <!-- Search and Filters -->
+    <div class="users-filters">
+        <div class="filters-card">
+            <!-- Mobile Filter Toggle -->
+            <button type="button" class="filters-toggle d-md-none">
+                <span>
+                    <i class="fas fa-filter"></i>
+                    Filters & Search
+                </span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <!-- Filters Content -->
+            <div class="filters-content" id="filtersContent">
+                <form action="/admin/users" method="GET" class="filters-form">
+                <div class="filters-row">
+                    <!-- Search Input -->
+                    <div class="filter-group">
+                        <label for="search" class="filter-label">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </label>
+                        <input 
+                            type="text" 
+                            id="search" 
+                            name="q" 
+                            class="form-control"
+                            placeholder="Search by name or username..."
+                            value="<%= typeof q !== 'undefined' ? q : '' %>"
+                        >
+                    </div>
+                    
+                    <!-- Sort By -->
+                    <div class="filter-group">
+                        <label for="sortBy" class="filter-label">
+                            <i class="fas fa-sort"></i>
+                            Sort
+                        </label>
+                        <select id="sortBy" name="sortBy" class="form-control">
+                            <option value="username" <%= typeof sortBy !== 'undefined' && sortBy === 'username' ? 'selected' : '' %>>
+                                By username
+                            </option>
+                            <option value="full_name" <%= typeof sortBy !== 'undefined' && sortBy === 'full_name' ? 'selected' : '' %>>
+                                Full name
+                            </option>
+                            <option value="birthdate" <%= typeof sortBy !== 'undefined' && sortBy === 'birthdate' ? 'selected' : '' %>>
+                                By birthdate
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!-- Sort Direction -->
+                    <div class="filter-group">
+                        <label for="sortDir" class="filter-label">
+                            <i class="fas fa-arrow-up-down"></i>
+                            Direction
+                        </label>
+                        <select id="sortDir" name="sortDir" class="form-control">
+                            <option value="asc" <%= typeof sortDir !== 'undefined' && sortDir === 'asc' ? 'selected' : '' %>>
+                                Ascending
+                            </option>
+                            <option value="desc" <%= typeof sortDir !== 'undefined' && sortDir === 'desc' ? 'selected' : '' %>>
+                                Descending
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Actions -->
+                    <div class="filter-group">
+                        <div class="filter-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-filter"></i>
+                                Apply
+                            </button>
+                            <a href="/admin/users" class="btn btn-outline">
+                                <i class="fas fa-times"></i>
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Users Table -->
+    <div class="users-table-container">
+        <div class="table-card">
+            <div class="table-header">
+                <h3 class="table-title">
+                    <i class="fas fa-users"></i>
+                    User List
+                    <span class="table-count">(<%= typeof users !== 'undefined' ? users.length : 0 %>)</span>
+                </h3>
+            </div>
+            
+            <% if (typeof users !== 'undefined' && users.length > 0) { %>
+                <!-- Desktop Table View -->
+                <div class="table-responsive">
+                    <table class="table users-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable<%= sortBy === 'username' ? ' sort-' + sortDir : '' %>" data-sort="username">
+                                    <span class="th-content">
+                                        Username
+                                        <i class="fas fa-<%= sortBy === 'username' ? (sortDir === 'asc' ? 'sort-up' : 'sort-down') : 'sort' %> sort-icon" aria-hidden="true"></i>
+                                    </span>
+                                </th>
+                                <th class="sortable<%= sortBy === 'full_name' ? ' sort-' + sortDir : '' %>" data-sort="full_name">
+                                    <span class="th-content">
+                                        Name
+                                        <i class="fas fa-<%= sortBy === 'full_name' ? (sortDir === 'asc' ? 'sort-up' : 'sort-down') : 'sort' %> sort-icon" aria-hidden="true"></i>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="th-content">
+                                        Gender
+                                    </span>
+                                </th>
+                                <th class="sortable<%= sortBy === 'birthdate' ? ' sort-' + sortDir : '' %>" data-sort="birthdate">
+                                    <span class="th-content">
+                                        Birthdate
+                                        <i class="fas fa-<%= sortBy === 'birthdate' ? (sortDir === 'asc' ? 'sort-up' : 'sort-down') : 'sort' %> sort-icon" aria-hidden="true"></i>
+                                    </span>
+                                </th>
+                                <th class="actions-column">
+                                    <span class="th-content">
+                                        Actions
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(function(user) { %>
+                                <tr class="user-row" data-user-id="<%= user.id %>">
+                                    <td class="username-cell">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                <i class="fas fa-user-circle"></i>
+                                            </div>
+                                            <div class="user-details">
+                                                <span class="username"><%= user.username %></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="name-cell">
+                                        <span class="full-name">
+                                            <%= user.first_name %> <%= user.last_name %>
+                                        </span>
+                                    </td>
+                                    <td class="gender-cell">
+                                        <span class="gender-badge gender-<%= user.gender %>">
+                                            <% if (user.gender === 'male') { %>
+                                                <i class="fas fa-mars"></i> Male
+                                            <% } else if (user.gender === 'female') { %>
+                                                <i class="fas fa-venus"></i> Female
+                                            <% } else { %>
+                                                <i class="fas fa-question-circle"></i> Not specified
+                                            <% } %>
+                                        </span>
+                                    </td>
+                                    <td class="birthdate-cell">
+                                        <span class="birthdate">
+                                            <%= new Date(user.birthdate).toLocaleDateString('en-US') %>
+                                        </span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="action-buttons">
+                                            <a href="/admin/users/<%= user.id %>" 
+                                                class="btn btn-sm btn-info" 
+                                                title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/admin/users/<%= user.id %>/edit" 
+                                                class="btn btn-sm btn-primary" 
+                                                title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button
+                                                type="button" 
+                                                class="btn btn-sm btn-danger btn-delete-user" 
+                                                data-user-id="<%= user.id %>"
+                                                data-user-name="<%= user.first_name %> <%= user.last_name %>"
+                                                title="Delete"
+                                            >
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Mobile Cards View -->
+                <div class="users-mobile-cards">
+                    <% users.forEach(function(user) { %>
+                        <div class="user-card" data-user-id="<%= user.id %>">
+                            <!-- Card Header -->
+                            <div class="user-card-header">
+                                <div class="user-card-avatar">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="user-card-info">
+                                    <h4 class="user-card-username"><%= user.username %></h4>
+                                    <p class="user-card-name"><%= user.first_name %> <%= user.last_name %></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Details -->
+                            <div class="user-card-details">
+                                <div class="user-card-detail">
+                                    <span class="user-card-detail-label">Gender</span>
+                                    <span class="user-card-detail-value">
+                                        <span class="gender-badge gender-<%= user.gender %>">
+                                            <% if (user.gender === 'male') { %>
+                                                <i class="fas fa-mars"></i> Male
+                                            <% } else if (user.gender === 'female') { %>
+                                                <i class="fas fa-venus"></i> Female
+                                            <% } else { %>
+                                                <i class="fas fa-question-circle"></i> Not specified
+                                            <% } %>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="user-card-detail">
+                                    <span class="user-card-detail-label">Birthdate</span>
+                                    <span class="user-card-detail-value">
+                                        <%= new Date(user.birthdate).toLocaleDateString('ru-RU') %>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Actions -->
+                            <div class="user-card-actions">
+                                <a 
+                                    href="/admin/users/<%= user.id %>" 
+                                    class="btn btn-sm btn-info" 
+                                    title="View"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </a>
+                                <a 
+                                    href="/admin/users/<%= user.id %>/edit" 
+                                    class="btn btn-sm btn-primary" 
+                                    title="Edit"
+                                >
+                                    <i class="fas fa-edit"></i>
+                                    Edit        
+                                </a>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-sm btn-danger btn-delete-user" 
+                                    data-user-id="<%= user.id %>"
+                                    data-user-name="<%= user.first_name %> <%= user.last_name %>"
+                                    title="Delete"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+                
+                <!-- Pagination -->
+                <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+                    <div class="pagination-container">
+                        <%- include('../partials/pagination', { 
+                            currentPage: page, 
+                            totalPages: totalPages,
+                            baseUrl: '/admin/users',
+                            queryParams: { q: q, sortBy: sortBy, sortDir: sortDir }
+                        }) %>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="empty-title">No users found</h3>
+                    <p class="empty-description">
+                        <% if (typeof q !== 'undefined' && q) { %>
+                            Nothing found for query "<%= q %>".
+                            <br>Try adjusting your search criteria.
+                        <% } else { %>
+                            There are no users in the system yet.
+                            <br>Create the first user to get started.
+                        <% } %>
+                    </p>
+                    <div class="empty-actions">
+                        <% if (typeof q !== 'undefined' && q) { %>
+                            <a href="/admin/users" class="btn btn-outline">
+                                <i class="fas fa-times"></i>
+                                Reset filters
+                            </a>
+                        <% } %>
+                        <a href="/admin/users/new" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add user
+                        </a>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Filters state for JS without inline EJS in script -->
+<div id="filtersState" data-has-active-filters="<%= ((typeof q !== 'undefined' && !!q) || (typeof sortBy !== 'undefined' && sortBy !== 'username') || (typeof sortDir !== 'undefined' && sortDir !== 'asc')) ? 'true' : 'false' %>"></div>
+<script>
+  (function () {
+    var el = document.getElementById('filtersState');
+    var val = el ? el.dataset.hasActiveFilters : 'false';
+    window.hasActiveFilters = val === 'true';
+  })();
+</script>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-exclamation-triangle text-danger"></i>
+                Delete Confirmation
+            </h3>
+            <button type="button" class="modal-close" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete user <strong id="deleteUsername"></strong>?</p>
+            <p class="text-muted">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
