@@ -76,11 +76,9 @@ A ready-to-use `docker-compose.yml` is provided.
 
 - Build and start:
   - `docker-compose up --build`
-- The app runs on `http://localhost:3000` (or `http://localhost:${APP_PORT}` if overridden).
+- The app runs on `http://localhost:3000` (or `http://localhost:${PORT}` if overridden).
 - Environment is injected in `docker-compose.yml`; adjust as needed.
 - The container entrypoint waits for PostgreSQL readiness, runs migrations and seeds, then starts the app.
-
-Note: The compose healthcheck targets `GET /healthz`. If you change or remove this endpoint, update the healthcheck accordingly.
 
 ## Environment Variables
 
