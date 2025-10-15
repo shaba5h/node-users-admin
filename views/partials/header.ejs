@@ -1,0 +1,44 @@
+<header class="main-header">
+    <div class="header-container">
+        <!-- Logo and Brand -->
+        <div class="header-brand">
+            <a href="/" class="brand-link">
+                <i class="fas fa-cogs brand-icon"></i>
+                <span class="brand-text">Admin Panel</span>
+            </a>
+        </div>
+        
+        <!-- Header Navigation -->
+        <nav class="header-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/admin/users" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- User Menu -->
+        <div class="header-user">
+            <div class="user-menu">
+                <button class="user-menu-toggle" type="button" data-toggle="dropdown">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="user-name">Administrator</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown">
+                    <form action="/logout" method="POST" class="logout-form">
+                        <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+                        <button type="submit" class="dropdown-item logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</header>
