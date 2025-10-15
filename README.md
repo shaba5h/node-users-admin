@@ -108,6 +108,7 @@ Seeding/Admin:
 - `ADMIN_BIRTHDATE` (ISO `YYYY-MM-DD`, default `1990-01-01`)
 - `SEED_USERS_COUNT` (number of regular users; default `200`)
 - `RUN_MIGRATIONS` (`true`/`false`, used by docker entrypoint)
+- `RUN_SEEDS` (`true`/`false`, used by docker entrypoint)
 
 ## Database Schema
 
