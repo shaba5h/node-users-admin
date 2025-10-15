@@ -13,12 +13,18 @@ export const sequelize = isTest
 				dialect: "postgres",
 				logging: isDev ? (msg) => console.debug(msg) : false,
 			})
-		: new Sequelize({
-				dialect: "postgres",
-				host: env.DB_HOST,
-				port: env.DB_PORT,
-				database: env.DB_NAME,
-				username: env.DB_USER,
-				password: env.DB_PASSWORD,
-				logging: isDev ? (msg) => console.debug(msg) : false,
-			});
+		: env.DB_DIALECT === "sqlite"
+			? new Sequelize({
+					dialect: "sqlite",
+					storage: env.DB_PATH,
+					logging: isDev ? (msg) => console.debug(msg) : false,
+				})
+			: new Sequelize({
+					dialect: "postgres",
+					host: env.DB_HOST,
+					port: env.DB_PORT,
+					database: env.DB_NAME,
+					username: env.DB_USER,
+					password: env.DB_PASSWORD,
+					logging: isDev ? (msg) => console.debug(msg) : false,
+				});
