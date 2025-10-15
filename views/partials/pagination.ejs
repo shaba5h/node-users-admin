@@ -1,0 +1,151 @@
+<%
+/**
+ * Pagination Component
+ * 
+ * @param {number} currentPage - Current page number (1-based)
+ * @param {number} totalPages - Total number of pages
+ * @param {string} baseUrl - Base URL for pagination links
+ * @param {object} queryParams - Additional query parameters to preserve
+ */
+
+// Set defaults
+const page = currentPage || 1;
+const total = totalPages || 1;
+const url = baseUrl || '';
+const params = queryParams || {};
+
+// Build query string from params
+function buildQueryString(pageNum) {
+    const allParams = { ...params, page: pageNum };
+    const queryString = Object.keys(allParams)
+        .filter(key => allParams[key] !== undefined && allParams[key] !== null && allParams[key] !== '')
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(allParams[key])}`)
+        .join('&');
+    return queryString ? `?${queryString}` : '';
+}
+
+// Calculate pagination range
+const maxVisiblePages = 7;
+let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+let endPage = Math.min(total, startPage + maxVisiblePages - 1);
+
+// Adjust start page if we're near the end
+if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+}
+
+const showFirstPage = startPage > 1;
+const showLastPage = endPage < total;
+const showPrevEllipsis = startPage > 2;
+const showNextEllipsis = endPage < total - 1;
+%>
+
+<% if (total > 1) { %>
+<nav class="pagination-nav" aria-label="Pagination">
+        
+        <ul class="pagination">
+            <!-- Previous Page -->
+            <li class="page-item page-prev <%= page <= 1 ? 'disabled' : '' %>">
+                <% if (page > 1) { %>
+                    <a class="page-link" href="<%= url %><%= buildQueryString(page - 1) %>" aria-label="Previous page">
+                        <i class="fas fa-chevron-left"></i>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                <% } else { %>
+<span class="page-link" aria-label="Previous page (disabled)">
+                        <i class="fas fa-chevron-left"></i>
+<span class="sr-only">Previous</span>
+                    </span>
+                <% } %>
+            </li>
+            
+            <!-- First Page -->
+            <% if (showFirstPage) { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= url %><%= buildQueryString(1) %>">1</a>
+                </li>
+            <% } %>
+            
+            <!-- Previous Ellipsis -->
+            <% if (showPrevEllipsis) { %>
+                <li class="page-item disabled">
+                    <span class="page-link page-ellipsis">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </span>
+                </li>
+            <% } %>
+            
+            <!-- Page Numbers -->
+            <% for (let i = startPage; i <= endPage; i++) { %>
+                <li class="page-item <%= i === page ? 'active' : '' %>">
+                    <% if (i === page) { %>
+                        <span class="page-link current-page" aria-current="page">
+                            <%= i %>
+                            <span class="sr-only">(current page)</span>
+                        </span>
+                    <% } else { %>
+                        <a class="page-link" href="<%= url %><%= buildQueryString(i) %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+                </li>
+            <% } %>
+            
+            <!-- Next Ellipsis -->
+            <% if (showNextEllipsis) { %>
+                <li class="page-item disabled">
+                    <span class="page-link page-ellipsis">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </span>
+                </li>
+            <% } %>
+            
+            <!-- Last Page -->
+            <% if (showLastPage) { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= url %><%= buildQueryString(total) %>"><%= total %></a>
+                </li>
+            <% } %>
+            
+            <!-- Next Page -->
+            <li class="page-item page-next <%= page >= total ? 'disabled' : '' %>">
+                <% if (page < total) { %>
+                    <a class="page-link" href="<%= url %><%= buildQueryString(page + 1) %>" aria-label="Next page">
+                        <span class="sr-only">Next</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                <% } else { %>
+                    <span class="page-link" aria-label="Next page (disabled)">
+                        <span class="sr-only">Next</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                <% } %>
+            </li>
+        </ul>
+    </nav>
+    
+    <script>
+        // Keyboard navigation for pagination
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') {
+                return; // Don't interfere with form inputs
+            }
+            
+            const currentPage = parseInt('<%= page %>');
+            const totalPages = parseInt('<%= total %>');
+            const baseUrl = '<%= url %>';
+            
+            if (e.key === 'ArrowLeft' && currentPage > 1) {
+                e.preventDefault();
+                const prevUrl = new URL(window.location);
+                prevUrl.searchParams.set('page', currentPage - 1);
+                window.location.href = prevUrl.toString();
+            } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+                e.preventDefault();
+                const nextUrl = new URL(window.location);
+                nextUrl.searchParams.set('page', currentPage + 1);
+                window.location.href = nextUrl.toString();
+            }
+        });
+    </script>
+<% } %>

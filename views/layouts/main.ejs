@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title + ' - ' : '' %>Admin Panel</title>
+    
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/pages.css">
+    <link rel="stylesheet" href="/public/css/components.css">
+    <link rel="stylesheet" href="/public/css/mobile.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Additional page-specific styles -->
+    <% if (typeof additionalCSS !== 'undefined') { %>
+        <% additionalCSS.forEach(function(css) { %>
+            <link rel="stylesheet" href="<%= css %>">
+        <% }); %>
+    <% } %>
+</head>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
+    <!-- Header -->
+    <%- include('../partials/header') %>
+    
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        
+        <!-- Main Content Area -->
+        <main class="main-content <%= typeof showSidebar !== 'undefined' && showSidebar === false ? 'full-width' : '' %>">
+            <!-- Breadcrumbs -->
+            <% if (typeof breadcrumbs !== 'undefined' && breadcrumbs.length > 0) { %>
+                <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
+            <% } %>
+            
+            <!-- Page Header -->
+            <% if (typeof pageTitle !== 'undefined' || typeof pageActions !== 'undefined') { %>
+                <div class="page-header">
+                    <% if (typeof pageTitle !== 'undefined') { %>
+                        <h1 class="page-title"><%= pageTitle %></h1>
+                    <% } %>
+                    <% if (typeof pageActions !== 'undefined') { %>
+                        <div class="page-actions">
+                            <%- pageActions %>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+            
+            <!-- Flash Messages -->
+            <%- include('../partials/flash-messages') %>
+            
+            <!-- Page Content -->
+            <div class="page-content">
+                <%- body -%>
+            </div>
+        </main>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="/public/js/main.js"></script>
+    <% if (typeof additionalJS !== 'undefined') { %>
+        <% additionalJS.forEach(function(js) { %>
+            <script src="<%= js %>"></script>
+        <% }); %>
+    <% } %>
+</body>
+</html>

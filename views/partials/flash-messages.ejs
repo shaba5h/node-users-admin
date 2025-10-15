@@ -1,0 +1,57 @@
+<!-- Flash Messages Container -->
+<div class="flash-messages">
+    <!-- Success Messages -->
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <i class="fas fa-check-circle alert-icon"></i>
+            <span class="alert-message"><%= success %></span>
+            <button type="button" class="alert-close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    <% } %>
+    
+    <!-- Error Messages -->
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error alert-dismissible" role="alert">
+            <i class="fas fa-exclamation-circle alert-icon"></i>
+            <span class="alert-message"><%= error %></span>
+            <button type="button" class="alert-close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    <% } %>
+    
+    <!-- Warning Messages -->
+    <% if (typeof warning !== 'undefined' && warning) { %>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <i class="fas fa-exclamation-triangle alert-icon"></i>
+            <span class="alert-message"><%= warning %></span>
+            <button type="button" class="alert-close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    <% } %>
+    
+    <!-- Info Messages -->
+    <% if (typeof info !== 'undefined' && info) { %>
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <i class="fas fa-info-circle alert-icon"></i>
+            <span class="alert-message"><%= info %></span>
+            <button type="button" class="alert-close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    <% } %>
+    
+    <!-- Validation Errors -->
+    <% if (typeof errors !== 'undefined' && errors && typeof errors.global !== 'undefined' && errors.global) { %>
+        <div class="alert alert-error alert-dismissible" role="alert">
+            <i class="fas fa-exclamation-circle alert-icon"></i>
+            <span class="alert-message"><%= errors.global %></span>
+            <button type="button" class="alert-close" data-dismiss="alert" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    <% } %>
+</div>
