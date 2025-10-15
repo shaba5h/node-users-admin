@@ -10,6 +10,7 @@ window.Users = {
 		this.bindEvents();
 		this.initDeleteConfirmation();
 		this.initFilters();
+		this.initPasswordToggle();
 		console.log("Users module initialized");
 	},
 
@@ -79,6 +80,61 @@ window.Users = {
 				filtersContent.classList.add("expanded");
 			}
 		});
+
+		// Password visibility toggle
+		document.addEventListener("click", (e) => {
+			if (
+				e.target.matches(".password-toggle") ||
+				e.target.closest(".password-toggle")
+			) {
+				e.preventDefault();
+				const btn = e.target.closest(".password-toggle");
+				this.togglePasswordVisibility(btn);
+			}
+		});
+	},
+
+	// Initialize password toggle (set initial icon/state)
+	initPasswordToggle: function () {
+		const toggleBtn = document.querySelector(".password-toggle");
+		const input = document.getElementById("password");
+		if (toggleBtn && input) {
+			input.type = "password";
+			this.updateToggleIcon(toggleBtn, false);
+		}
+	},
+
+	// Toggle password visibility
+	togglePasswordVisibility: function (toggleBtn) {
+		if (!toggleBtn) return;
+		const targetId = toggleBtn.getAttribute("data-target") || "password";
+		const input = document.getElementById(targetId) || toggleBtn.closest(".password-input-group")?.querySelector("input");
+		if (!input) return;
+		const isVisible = input.type === "text";
+		input.type = isVisible ? "password" : "text";
+		this.updateToggleIcon(toggleBtn, !isVisible);
+		input.focus();
+		setTimeout(() => {
+			const len = input.value.length;
+			try {
+				input.setSelectionRange(len, len);
+			} catch (_) {}
+		}, 0);
+	},
+
+	// Update toggle icon and ARIA label
+	updateToggleIcon: function (toggleBtn, isVisible) {
+		const icon = toggleBtn.querySelector("i");
+		if (!icon) return;
+		if (isVisible) {
+			icon.className = "fas fa-eye-slash";
+			toggleBtn.setAttribute("aria-label", "Hide password");
+			toggleBtn.title = "Hide password";
+		} else {
+			icon.className = "fas fa-eye";
+			toggleBtn.setAttribute("aria-label", "Show password");
+			toggleBtn.title = "Show password";
+		}
 	},
 
 	// Initialize delete confirmation
