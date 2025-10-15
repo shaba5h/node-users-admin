@@ -1,0 +1,212 @@
+<% layout('layouts/main') %>
+
+<!-- User Profile Content -->
+<div class="profile-container">
+    <!-- User Header Card -->
+    <div class="profile-header-card">
+        <div class="profile-header-content">
+            <!-- User Avatar -->
+            <div class="profile-avatar">
+                <div class="avatar-circle">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+            
+            <!-- User Basic Info -->
+            <div class="profile-basic-info">
+                <h1 class="profile-name">
+                    <%= user.first_name %> <%= user.last_name %>
+                </h1>
+                <p class="profile-username">
+                    <i class="fas fa-at"></i>
+                    <%= user.username %>
+                </p>
+                <div class="profile-meta">
+                    <span class="profile-meta-item">
+                        <i class="fas fa-calendar-plus"></i>
+                        Created: <%= new Date(user.created_at || Date.now()).toLocaleDateString('en-US') %>
+                    </span>
+                    <% if (user.updated_at && user.updated_at !== user.created_at) { %>
+                        <span class="profile-meta-item">
+                            <i class="fas fa-edit"></i>
+                            Updated: <%= new Date(user.updated_at).toLocaleDateString('en-US') %>
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Content Grid -->
+    <div class="profile-content-grid">
+        <!-- Personal Information Card -->
+        <div class="profile-card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user"></i>
+                    Personal Information
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="info-grid">
+                    <!-- Full Name -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-id-card"></i>
+                            Full name
+                        </label>
+                        <div class="info-value">
+                            <%= user.first_name %> <%= user.last_name %>
+                        </div>
+                    </div>
+                    
+                    <!-- Username -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-at"></i>
+                            Username
+                        </label>
+                        <div class="info-value">
+                            <code><%= user.username %></code>
+                        </div>
+                    </div>
+                    
+                    <!-- Gender -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-venus-mars"></i>
+                            Gender
+                        </label>
+                        <div class="info-value">
+                            <span class="gender-badge gender-<%= user.gender %>">
+                                <% if (user.gender === 'male') { %>
+                                    <i class="fas fa-mars"></i> Male
+                                <% } else if (user.gender === 'female') { %>
+                                    <i class="fas fa-venus"></i> Female
+                                <% } else { %>
+                                    <i class="fas fa-question-circle"></i> Not specified
+                                <% } %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Birthdate -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-birthday-cake"></i>
+                            Birthdate
+                        </label>
+                        <div class="info-value">
+                            <%= new Date(user.birthdate).toLocaleDateString('ru-RU', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }) %>
+                            <span class="info-secondary">
+                                (age: <%= Math.floor((Date.now() - new Date(user.birthdate)) / (365.25 * 24 * 60 * 60 * 1000)) %> years)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Account Information Card -->
+        <div class="profile-card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    Account Information
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="info-grid">
+                    <!-- User ID -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-hashtag"></i>
+                            User ID
+                        </label>
+                        <div class="info-value">
+                            <code><%= user.id %></code>
+                        </div>
+                    </div>
+                    
+                    <!-- Created Date -->
+                    <div class="info-item">
+                        <label class="info-label">
+                            <i class="fas fa-calendar-plus"></i>
+                            Created
+                        </label>
+                        <div class="info-value">
+                            <%= new Date(user.created_at || Date.now()).toLocaleDateString('ru-RU', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) %>
+                        </div>
+                    </div>
+                    
+                    <!-- Last Updated -->
+                    <% if (user.updated_at && user.updated_at !== user.created_at) { %>
+                        <div class="info-item">
+                            <label class="info-label">
+                                <i class="fas fa-edit"></i>
+                                Last update
+                            </label>
+                            <div class="info-value">
+                                <%= new Date(user.updated_at).toLocaleDateString('ru-RU', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-exclamation-triangle text-danger"></i>
+                Delete Confirmation
+            </h3>
+            <button type="button" class="modal-close" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete user <strong id="deleteUsername"></strong>?</p>
+            <p class="text-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                This action cannot be undone. All user data will be permanently deleted.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Delete user
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
